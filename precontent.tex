@@ -1,127 +1,68 @@
+% !TeX root = main.tex
+%-------------------------------------------------------------------------
+%	PRE-TEXTUAL PAGES NOT PRINTED IN THE TABLE OF CONTENTS
+%-------------------------------------------------------------------------
+\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}}
 
 %-------------------------------------------------------------------------
-%	QUOTATION PAGE
+%	BIOGRAPHY PAGE
 %-------------------------------------------------------------------------
-%\quotepage{Matt Smith as \emph{The Doctor}, written by Matthew Graham}
-%{
-%	I am and always will be the optimist, the hoper of far-flung hopes and the
-%	dreamer of \newline improbable dreams
-%}
-
-%-------------------------------------------------------------------------
-%	DEDICATORY
-%-------------------------------------------------------------------------
-
-%\begin{dedicatory}
-%	Dedicated to (optional) 
-%\end{dedicatory}
+\begin{envprecontent}{Biography}
+I am a PhD candidate in Economics\dots
+\end{envprecontent}
 
 %-------------------------------------------------------------------------
 %	ACKNOWLEDGEMENTS PAGE
 %-------------------------------------------------------------------------
-\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}}
-\begin{acknowledgements}
-
+\begin{envprecontent}{Acknowledgements}
 Acknowledge ALL the people!
-
-\end{acknowledgements}
-\addtocontents{toc}{\protect\setcounter{tocdepth}{3}}
-%\addvspacetoc{0.3cm} % Add a gap in the Contents, for aesthetics
-
+\end{envprecontent}
 
 %-------------------------------------------------------------------------
-%	ABSTRACT PAGE (PORTUGUESE)
+%	ABSTRACT PAGE IN PORTUGUESE OR PÁGINA DE RESUMO
 %-------------------------------------------------------------------------
-\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}}
-\begin{abstract}[
-	thesistitle={Titulo da Tese em Portugês},
-	title={Resumo},
-	degree={Mestrado Integrado em Engenharia Física},
-	nameconnector={por},
-        keywordsname={Palavras-chave},
-        keywords={física (keywords em português)}]
-\begin{otherlanguage}{portuguese}
+\begin{envprecontent}[portuguese]{Resumo}
+Esta tese é sobre alguma coisa. 
+O documento LaTeX e suas dependências formam um modelo de tese para a tese de doutoramento da FEP. É uma tentativa de adaptar o
+\href{https://www.overleaf.com/latex/templates/fcup-thesis-layout-2024/gpbvtwzckzgm}{modelo de tese da FCUP 2024},
+disponível no \href{https://www.overleaf.com/}{Overleaf},
+às \href{https://sigarra.up.pt/fep/pt/conteudos_geral.ver?pct_pag_id=1009493\&pct_parametros=pv_unidade=7\&pct_grupo=28581\#28581}{regras de doutoramento da FEP} de agosto de 2025.
+\end{envprecontent}
 
-Este tese é sobre alguma coisa
-
-
-
-\end{otherlanguage}
-\end{abstract}
-\addtocontents{toc}{\protect\setcounter{tocdepth}{3}}
 %-------------------------------------------------------------------------
 %	ABSTRACT PAGE
 %-------------------------------------------------------------------------
-\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}}
-\begin{abstract}
+\begin{envprecontent}{Abstract}
+This thesis is about something, I guess. 
+The LaTeX document and its dependencies are a thesis model for the FEP PhD thesis. It's an attempt to adapt the 
+\href{https://www.overleaf.com/latex/templates/fcup-thesis-layout-2024/gpbvtwzckzgm}{FCUP thesis layout 2024}, 
+available at \href{https://www.overleaf.com/}{Overleaf}, 
+to the August 2025 \href{https://sigarra.up.pt/fep/pt/conteudos_geral.ver?pct_pag_id=1009493\&pct_parametros=pv_unidade=7\&pct_grupo=28581\#28581}{FEP's rules for PhD thesis}.
+\end{envprecontent}
 
-This thesis is about something, I guess.
+%-------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%-------------------------------------------------------------------------
+\btypeout{\contentsname}
+\phantomsection
+\addcontentsline{toc}{section}{\contentsname}
+\tableofcontents % Write out the Table of Contents
+\cleardoublepage
 
-\end{abstract}
-\addtocontents{toc}{\protect\setcounter{tocdepth}{3}}
+%-------------------------------------------------------------------------
+%	PRE-TEXTUAL PAGES PRINTED IN THE TABLE OF CONTENTS
+%-------------------------------------------------------------------------
+\addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
 
 %-------------------------------------------------------------------------
 %	LIST OF CONTENTS/FIGURES/TABLES
 %-------------------------------------------------------------------------
-
-\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}}
-
-\tableofcontents % Write out the Table of Contents
-
-\addtocontents{toc}{\protect\setcounter{tocdepth}{3}}
-\addvspacetoc{0.3cm}
-
-%\listoftables % Write out the List of Tables
-
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{section}{List of Figures}
 \listoffigures % Write out the List of Figures
 
-
-
-%\addvspacetoc{0.3cm}
-
-%-------------------------------------------------------------------------
-%	PHYSICAL CONSTANTS/OTHER DEFINITIONS
-%-------------------------------------------------------------------------
-
-%\begin{listofcontants}
-%	\const{My little ponny test of magical rainbow}{$mn/mp$}
-%    {$2.997\ 924\ 58\times10^{8}\ \mbox{ms}^{-\mbox{s}}$}
-%   \const{Vaccuum permeability test of magical rainbow for a specific case of
-%   condensed matter physics}
-%   {$\epsilon_0$}{$2.997\ 924\ 58\times10^{8}\ \mbox{ms}^{-\mbox{s}}$}
-%	\const{Speed of Light test of magical rainbow}{$c$}
-%    {$2.997\ 924\ 58\times10^{8}\ \mbox{ms}^{-\mbox{s}}$}
-%\end{listofcontants}
-
-
-%-------------------------------------------------------------------------
-%	SYMBOLS
-%-------------------------------------------------------------------------
-
-%\begin{listofsymbols}
-%	\symb{$F_{\mu\nu}$}{Maxwell tensor}{F}
-%	\symb{$a$}{distance}{m}
-%	\\
-%	\symb{$\omega$}{angular frequency}{rads$^{-1}$}
-%\end{listofsymbols}
-
-
-%-------------------------------------------------------------------------
-%	NOTATION
-%-------------------------------------------------------------------------
-
-% \newcommand\notationname{Notation and Conventions}
-% \addtotoc{\notationname}
-% \fancyhead[LO]{\textsc{\notationname}}
-
-% \input{Notation}
-
-
-
-%-------------------------------------------------------------------------
-%	ABBREVIATIONS
-%-------------------------------------------------------------------------
-
-\newacronym{ann}{ANN}{Artificial Neural Network}
-
-\printglossary[type=\acronymtype,title={List of Abbreviations}]
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{section}{List of Tables}
+\listoftables % Write out the List of Tables

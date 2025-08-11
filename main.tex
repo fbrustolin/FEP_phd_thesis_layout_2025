@@ -1,21 +1,24 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Masters/Doctoral Thesis
+% Doctoral Thesis for Faculty of Economics of the University of Porto
 %
 % %%%%% IMPORTANT %%%%%
-% 1) Edit Front/vars.tex
-% 2) Compile Front/main.tex
-% 3) Edit vars.tex
-% 4) Edit precontent.tex
-%
-% BEFORE ANYTHING ELSE
-% You can also set some interesting stuff in the preamble.tex file
-% If you know what you're doing.
+% - Requires LuaLaTeX to compile.
+% - Bibliography set to use BibLateX and Biber; change the
+%   preamble.tex file and the end of this file if you want 
+%   to use BibTeX with NatBib.
+% %%%%% USAGE INSTRUCTIONS %%%%%
+% 1. Edit the MS Word templates for the [covers](<.fep/FEP Capa doutoramento.docx>) (front and back) and the [title page](<.fep/Cover sheet.docx>) (in *portuguese*, *capas* e *folha de rosto*).
+% 2. Export the covers as [Front/covers.pdf](Front/covers.pdf) and the title page as [Front/title.pdf](Front/title.pdf).
+% 3. Edit the root [vars.tex](vars.tex) file and provide the same info as in the cover and title page when appropriate.
+% 4. Review and, eventually, edit [preamble.tex](preamble.tex) file. Don't mess with it if you don't know what to do.
+% 5. Edit root [precontent.tex](precontent.tex) file.
+% 6. If you want to ensure that all of your labels are being used, check the *Python* script [scripts/check_references.py](scripts/check_references.py) for a way to verify it.
+% 7. And, now, edit at will!
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % The default font size and two-sided printing
 % For a one-sided printing change the flag "twoside" to "oneside"
-\documentclass[11pt, oneside, table,xcdraw]{Thesis}
-
+\documentclass[12pt, twoside]{Thesis}
 
 %-------------------------------------------------------------------------
 %   PREAMBLE AND SETTINGS
@@ -27,11 +30,9 @@
 \input{vars}
 % ------------------
 
-
 %-------------------------------------------------------------------------
 %	DOCUMENT
 %-------------------------------------------------------------------------
-
 \begin{document}
 
 % Start counting pages in an unused scheme to fix backref
@@ -39,57 +40,23 @@
 
 % Includes the front pages (cover and etc.)
 \pagestyle{empty}
-\includepdf[pages={1},pagecommand={},scale=1]{Front/Cover/template}
+\includepdf[pages={1},pagecommand={},scale=1]{Front/covers}
 \cleardoublepage
-\includepdf[pages={2},pagecommand={},scale=1]{Front/Cover/template}
+\includepdf[pages={1},pagecommand={},scale=1]{Front/title}
 \cleardoublepage
 \pagestyle{fancy}
-
-%----------- Failed attempt to make cover page in latex ------------------
-
-% Cover page
-%\newgeometry{bindingoffset=0cm,
-%	top=1.27cm,
-%	outer=1.27cm,
-%	inner=1.27cm,
-%	bottom=1.27cm}
-
-%\pagestyle{empty}
-%
-%\begin{picture}(-5,0)(2.5,0)
-%% MSc symbol
-%\put(331.8,-808.061){\includegraphics[width=267.6pt,height=464.25pt]{Front/Cover/MSc.png}}
-%% FEUP logo
-%\put(382,-345){\includegraphics[width=155.9pt]{Front/Cover/FEUP.png}}
-%% FCUP logo
-%\put(360.5,-293){\includegraphics[width=183pt]{Front/logos/fcup.png}}
-%\end{picture}
-%
-%%\makebox[12cm][l]{\ttitle}
-%
-%\vfill
-%\parbox[t][12cm][t]{12cm}{\bf\fontsize{55}{0}\selectfont\ttitle}
-%\vfill
-%
-%\restoregeometry
 
 %-------------------------------------------------------------------------
 
 % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
 \frontmatter
 
-% Title page
-%\maketitle
-
 % Edit this file!
 \input{precontent}
-
 
 %-------------------------------------------------------------------------
 %	THESIS CONTENT - CHAPTERS
 %-------------------------------------------------------------------------
-
-\addvspacetoc{0.3cm}
 
 % Begin numeric (1,2,3...) page numbering
 \mainmatter
@@ -98,37 +65,49 @@
 \renewcommand{\chaptermark}[1]{\markboth{\thechapter. \textsc{#1}}{}}
 %\fancyhead[LO]{\leftmark}
 
-
 %%% -----------  ADD CHAPTERS HERE ------------------ %%%
-
 \input{Chapters/ChapterTemplate}
 % Add others as needed
-
-
-%-------------------------------------------------------------------------
-%	BIBLIOGRAPHY
-%-------------------------------------------------------------------------
-\addvspacetoc{0.5cm}
-\addtotoc{Bibliography}
-
-%\fancyhead[LO]{\textsc{Bibliography}}
-
- % The references are stored in the file "Bibliography.bib"
-\bibliography{Bibliography}
 
 %-------------------------------------------------------------------------
 %	THESIS CONTENT - APPENDICES
 %-------------------------------------------------------------------------
-
 \appendix % Cue to tell LaTeX that the following 'chapters' are Appendices
+\cleardoublepage
+\appendixpage
 
 %%% -----------  ADD APPENDIX HERE ------------------ %%%
-
 \input{Appendices/AppendixTemplate}
 %\input{Appendices/AppendixB}
 %\input{Appendices/AppendixC}
 
 \backmatter
 
+%-------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%-------------------------------------------------------------------------
+\printbibliography[heading=bibintoc]
+% for bibtex:
+% \phantomsection
+% \addcontentsline{toc}{chapter}{References}
+%  % The references are stored in the file "Bibliography.bib"
+% \bibliography{Bibliography}
+
+%-------------------------------------------------------------------------
+%	BACK COVER
+%-------------------------------------------------------------------------
+\cleardoublepage
+\hbox{}
+\thispagestyle{empty}
+
+% adds the blank pages before the back cover
+\cleardoublepage
+\hbox{}
+\thispagestyle{empty}
+
+% Include the back cover
+\newpage
+\thispagestyle{empty}
+\includepdf[pages={2},pagecommand={},scale=1]{Front/covers}
 
 \end{document}

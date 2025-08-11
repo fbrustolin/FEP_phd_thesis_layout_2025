@@ -1,39 +1,123 @@
+% !TeX root = main.tex
 %-------------------------------------------------------------------------
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %-------------------------------------------------------------------------
+\usepackage{mathptmx}
+% Use Times New Roman as main font
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
 
-% Include pdf pages in the document
-% Necessary to include the front pages (cover and etc.)
-\usepackage{pdfpages}
+%-------------------------------------------------------------------------
+% Table of contents and appendices setup
+%-------------------------------------------------------------------------
+\usepackage{tocloft}
+\tocloftpagestyle{fancy}
+\usepackage[toc]{appendix} % 'toc' option includes appendix chapters in ToC
+\noappendicestocpagenum % Do not number the appendix page in the ToC
 
-% For the cover page
-%\usepackage{tikz}
+% Alphalph and etoolbox to have Appendix A, B, ..., Z, AA, AB, ... numbering
+% https://tex.stackexchange.com/a/134046/289572
+\usepackage{alphalph,etoolbox}
+\appto\appendix{% patch \appendix so \AlphAlph is used
+  \renewcommand\thechapter{\AlphAlph{\value{chapter}}}%
+}
 
-% Fix top page geometry on long titles
-\setlength{\headheight}{14pt}  %Try fix error
+% Prevent that the first citation is in the ToC
+\usepackage{notoccite}
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+
+%-------------------------------------------------------------------------
+% Languages setup
+%-------------------------------------------------------------------------
 
 % Language hyphenation and typographical rules
 \usepackage[portuguese,english]{babel}
+\setlocalecaption{english}{bib}{References}
 %Custom hyphenization
 \hyphenation{Py-thon}
 \hyphenation{Ju-py-ter}
 \hyphenation{Ma-the-ma-ti-ca}
 
+%-------------------------------------------------------------------------
+% Bibliography setup
+%-------------------------------------------------------------------------
+
+% Use biblatex with biber for references/bibliography
+\AddToHook{package/biblatex/after}{%
+
+\renewbibmacro*{doi+eprint+url}{ % redefine the macro to print DOI, eprint, URL
+  \iftoggle{bbx:doi}
+    {\printfield{doi}}
+    {}%
+  \newunit\newblock
+  \iftoggle{bbx:eprint}
+    {\usebibmacro{eprint}}
+    {}%
+  \newunit\newblock
+  \iffieldundef{doi}
+    {\usebibmacro{url+urldate}} % prints URL only if there is no DOI available
+    {}}% closes \renewbibmacro
+
+\renewbibmacro*{volume+number+eid}{
+  \iffieldundef{volume}
+    {}
+    {
+      \iffieldundef{number}
+        {\addcomma\addspace Vol.~\printfield{volume}} % only volume
+        {\addcomma\addspace Vol.~\printfield{volume}\addcomma\addspace Nº~\printfield{number}} % both volume and number
+    }
+  \setunit*{\addcomma\space}
+  \printfield{eid}
+}
+
+\DeclareFieldFormat % https://tex.stackexchange.com/a/509406/289572
+  [article,inbook,incollection,inproceedings,patent,thesis,unpublished,book,online]
+  {titlecase:title}{\MakeSentenceCase*{#1}}
+
+\DeclareSortingNamekeyTemplate{ % from https://github.com/plk/biblatex/issues/1241#issuecomment-1210851762
+    \keypart{
+        \namepart[use=true]{prefix}
+        \namepart{family}
+    }
+    \keypart{
+        \namepart[inits=true]{given}
+    }
+    \keypart{
+        \namepart{suffix}
+    }
+    \keypart{
+        \namepart[use=false]{prefix}
+    }} % closes \DeclareSortingNamekeyTemplate
+
+\AtEveryBibitem{% clear the day and month of date field for all entries
+  \clearfield{month}
+  \clearfield{day}} % closes \AtEveryBibitem
+
+\DefineBibliographyStrings{english}{%
+  bibliography = {References},
+}
+} % closes \AddToHook
+
+\usepackage[bibstyle=ext-authoryear,citestyle=authoryear-comp,articlein=false,dashed=fullhash,isbn=false,eprint=false,uniquename=false,uniquelist=false,giveninits=true,mincitenames=1,maxcitenames=2,maxbibnames=20]{biblatex}
+\addbibresource{Bibliography.bib}
+
+% % Use the natbib reference package - read up on this to edit the reference
+% % style; if you want text (e.g. Smith et al., 2012) for the in-text references
+% % (instead of numbers), remove 'numbers'
+% \usepackage{natbib}
+% \bibliographystyle{econ}  % Use the econ bibliography style
+% % If you want to use the 'plain' style, change the above line to:
+% % \bibliographystyle{plainnat}
+
+% Include pdf pages in the document
+% Necessary to include the front pages (cover and etc.)
+\usepackage{pdfpages}
+
 % Inline quotes
 % added for \begin{displayquote}
 \usepackage[autostyle]{csquotes}
-
-% Bibliography setup
-% Use the natbib reference package - read up on this to edit the reference
-% style; if you want text (e.g. Smith et al., 2012) for the in-text references
-% (instead of numbers), remove 'numbers'
-\usepackage[square, numbers, comma, sort&compress]{natbib}
-\bibliographystyle{IEEEtranN}  % I actually quite like this one
-% \bibliographystyle{apsrev4-1-etal} % With emphasized titles. ORIGINAL
-% Prevent that the first citation is in the ToC
-\usepackage{notoccite}
-\setlocalecaption{english}{bib}{References}
-
 
 % Interesting float placements (like 'H') and custom float types
 \usepackage{float}
@@ -43,7 +127,7 @@
 % Force float barriers, use as \FloatBarrier
 \usepackage[section]{placeins}
 % Place floats *above* footnotes
-\usepackage[bottom, perpage, symbol]{footmisc}
+\usepackage[bottom,hang,flushmargin]{footmisc}
 % Set default float placement
 \makeatletter
 \renewcommand{\fps@figure}{tbph}
@@ -52,7 +136,6 @@
 
 % Pretty colours
 \usepackage{xcolor}
-% \usepackage{color} % Deprecated by xcolor
 
 % SVGs with Inkscape and PDF+LaTeX
 % https://tex.stackexchange.com/questions/473994/svg-and-inkscape
@@ -69,14 +152,16 @@
 \usepackage{caption}
 \usepackage{subcaption}
 
-% Math stuff
+%-------------------------------------------------------------------------
+% Math stuff setup
+%-------------------------------------------------------------------------
 \usepackage{amsmath} % Interesting environments
 \usepackage{amssymb} % Interesting symbols
+\usepackage{amsthm} % Theorem environments
 \usepackage{commath} % Interesting macros
 \usepackage{braket} % Dirac bra-ket and set notations
-\usepackage{mathpazo} % Math font (palatino for Computer Modern on math)
 \usepackage{mathtools} % Mathematical tools to use with amsmath
-\setstretch{1.5}
+
 % Math alphabet
 \DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
 \newcommand{\Sa}{\pazocal{S}}
@@ -86,11 +171,14 @@
 \newcommand{\Ia}{\pazocal{I}}
 \newcommand{\Ea}{\pazocal{E}}
 \newcommand{\ja}{\pazocal{J}}
+
 %Custom math operators
 \DeclareMathOperator*{\meshgrid}{meshgrid}
+
 % Floor and ceiling of numbers
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
 % Notation variables
 \newcommand{\dd}{\mathrm{d}}
 
@@ -108,57 +196,14 @@
 % Use more than one optional parameter in a new commands
 \usepackage{xargs}
 
-\usepackage{transparent}
-
-% Code listings
-\usepackage{listings}
-% Colors for the listing
-\definecolor{dkgreen}{rgb}{0,0.6,0}
-\definecolor{gray}{rgb}{0.5,0.5,0.5}
-\definecolor{mauve}{rgb}{0.58,0,0.82}
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
-\definecolor{orange}{RGB}{255,127,0}
-% Python style for code blocks
-\lstdefinestyle{Python}{
-        language=Python,
-         numberstyle=\small,
-         stepnumber=2,
-         numbersep=10pt,
-         basicstyle={\small\ttfamily},
-         keywordstyle    = \color{blue},
-         commentstyle    = \color{red}\ttfamily,
-         stringstyle=\color{orange},
-         tabsize=2,
-         columns=fullflexible,
-         backgroundcolor=\color{backcolour},
-         frame=none,
-         numbers=left,
-         aboveskip=5mm,
-         belowskip=5mm,
-         breaklines=true
-}
-
-% Algorithmicx provides a flexible, yet easy to use, way for inserting good
-% looking pseudocode or source code in your papers.
-\usepackage{algorithmicx}
-
 % Hyperref and Backref
 % backref makes the bibliography say where the entry was cited.
 % For the print version of the thesis you might wanna set all colors to back
 \usepackage{hyperref}
-\usepackage[hyperpageref]{backref}
+% \usepackage[hyperpageref]{backref}
 \hypersetup{colorlinks, citecolor=black, urlcolor=black,
         linkcolor=black, breaklinks=true, hypertexnames=true}
-\renewcommand*{\backref}[1]{}
-\renewcommand*{\backrefalt}[4]{%
-    \ifcase #1%
-          \or [Cited on page~#2.]%
-          \else [Cited on pages~#2.]%
-    \fi%
-    }
+
 % Interesting URL breakings
 \usepackage{url}
 \def\UrlBreaks{\do\/\do-\do\&\do.\do:}
@@ -173,6 +218,7 @@
 
 % Create tabular cells spanning multiple rows
 \usepackage{multirow}
+\usepackage{longtable} % For long tables that span multiple pages
 
 % Changes bullet points marker
 \renewcommand{\labelitemi}{\(\bullet\)}
@@ -214,55 +260,27 @@
     }
 \newcommandx{\thiswillnotshow}[2][1=]{\todo[disable,#1]{#2}}
 
-% Use Arial as main font
-% Need to use the LuaLaTex compiler
-\usepackage{fontspec}
-\setmainfont{Arial}
 
-\usepackage[acronym,toc,shortcuts]{glossaries}
-\makeglossaries
-%\usepackage{acronym} 
-
-% \usepackage{tocloft}
-
-% \renewcommand{\cftchapaftersnum}{.}%
-% \renewcommand{\cftsecaftersnum}{.}%
-% \renewcommand{\cftsubsecaftersnum}{.}%
-% \renewcommand{\cftsubsubsecaftersnum}{.}%
-
-%\usepackage{titletoc}
-\usepackage[dotinlabels]{titletoc}
-\contentsmargin{0em}
-
-
-\dottedcontents{section}[3.9em]{}{2.3em}{3pt}
-\dottedcontents{subsection}[84pt]{}{3.2em}{3pt}
-\dottedcontents{subsubsection}[104pt]{}{4.0em}{3pt}
-\dottedcontents{chapter}[20pt]{}{20pt}{3pt}
-\dottedcontents{figure}[20pt]{}{20pt}{3pt}
-\dottedcontents{table}[20pt]{}{20pt}{3pt}
-
-%https://tex.stackexchange.com/questions/493343/add-dotted-lines-in-toc-without-changing-spacing
-
-
-%\renewcommand{\cftchapaftersnum}{.}%
+% \usepackage[acronym,toc,shortcuts]{glossaries}
+% \makeglossaries
+\usepackage{acronym} 
 
 \usepackage{caption}
 \captionsetup{justification=raggedright,singlelinecheck=false}
 
-\setcounter{secnumdepth}{3}
-\setcounter{tocdepth}{3}
-% \usepackage{tocloft}%
-
-
-\titleformat{\subsection}  % which section command to format
-  {\fontsize{12}{14}} % format for whole line
-  {\thesubsection} % how to show number
-  {1em} % space between number and text
-  {} % formatting for just the text
-  [] % formatting for after the text
+%-------------------------------------------------------------------------
+%	Divisions' title formatting
+%-------------------------------------------------------------------------
+\titleformat{\subsubsection}{\fontsize{12}{0}\selectfont\bfseries}{\thesubsubsection{.}}{1em}{}
+\titleformat{\subsection}{\fontsize{12}{0}\selectfont\bfseries}{\thesubsection{.}}{1em}{}
+\titleformat{\section}{\fontsize{14}{0}\selectfont\bfseries}{\thesection{.}}{1em}{}
+\titleformat{\chapter}[hang]{\fontsize{20}{0}\selectfont\bfseries}{\thechapter{.}}{1em}{}
 
 \titlespacing\chapter{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
 \titlespacing\section{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
 \titlespacing\subsection{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
 \titlespacing\subsubsection{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
+
+% Python and MATLAB styles for code blocks
+\usepackage{pythonhighlight}
+\usepackage{matlab-prettifier}

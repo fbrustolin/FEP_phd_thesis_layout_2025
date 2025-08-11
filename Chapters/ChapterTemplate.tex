@@ -14,6 +14,11 @@
 % Write text in here
 % Use \subsection and \subsubsection to organize text
 
+This is a thesis model for the FEP PhD thesis. It's an attempt to adapt the 
+\href{https://www.overleaf.com/latex/templates/fcup-thesis-layout-2024/gpbvtwzckzgm}{FCUP thesis layout 2024}, 
+available at \href{https://www.overleaf.com/}{Overleaf}, 
+to the August 2025 \href{https://sigarra.up.pt/fep/pt/conteudos_geral.ver?pct_pag_id=1009493\&pct_parametros=pv_unidade=7\&pct_grupo=28581\#28581}{FEP's rules for PhD thesis}.
+
 Welcome to the tutorial on how to use this thesis model. This is not to teach
 you how to use \LaTeX. For that read a tutorial. But this aims to teach you how
 to do the basic stuff you will need in order to produce a decent document.
@@ -22,8 +27,8 @@ We can start with a section and a section epigraph:
 \section{Citations}
 \epigraph{Python is a truly wonderful language. When somebody comes up with a good idea it takes about 1 minute and five lines to program something that almost does what you want. Then it takes only an hour to extend the script to 300 lines, after which it still does almost what you want.}{Dr. Jack Jansen,  maintainer of MacPython}
 
-You can add extra info to you references, like~\cite[section 3]{Fienup1982}. You
-can also call them by author, like saying~\citet{Fienup1982}\unsure{You can make
+You can add extra info to you references, like~\parencite[section 3]{Fienup1982}. You
+can also call them by author, like saying~\textcite{Fienup1982}\unsure{You can make
 personal notes like this}.
 
 Also a random displayquote thing:
@@ -31,6 +36,19 @@ Also a random displayquote thing:
 \begin{displayquote}
     How can we image an object that's behind or enclosed on a medium where light does not propagate trivially? How can we manipulate light propagating in these media?
 \end{displayquote}
+
+Lean manufacturing has been a transformative approach in industrial operations, 
+particularly in the UK, where its early adoption was documented by \textcite{voss1987jit}. 
+The theoretical underpinnings of investment decisions under asymmetric information, 
+which are crucial to understanding capital allocation in such environments, 
+were explored by \textcite{daniel1995financing} in a comprehensive handbook on finance. 
+Broader historical context is provided by \textcite{womack1990machine}, who trace 
+the evolution of lean production and its global impact. In the Portuguese context, 
+structural economic challenges and their implications for development were 
+analyzed by \textcite{goncalves1995problemas}, offering insights into national 
+policy constraints. More recently, the integration of lightweight formal methods into 
+recruitment engineering has been being discussed in the literature. Some works 
+highlight the role of digital tools in modern organizational processes \parencite[e.g.,][]{george2003application}.
 
 \section{Figures}
 
@@ -190,9 +208,32 @@ And this is an equation with multiple lines:
 \end{aligned}
 \end{equation}
 
+This is some MATLAB code:
+\begin{lstlisting}[style=Matlab-editor]
+% Sample MATLAB Code: Plotting a Sine Wave
+
+% Define the time vector from 0 to 2*pi with small increments
+t = 0:0.01:2*pi;
+
+% Compute the sine of each time point
+y = sin(t);
+
+% Create the plot
+figure;
+plot(t, y, 'b-', 'LineWidth', 2);
+
+% Add title and labels
+title('Sine Wave');
+xlabel('Time (radians)');
+ylabel('Amplitude');
+
+% Add grid
+grid on;
+\end{lstlisting}
+
 And this is some random Python code:
 
-\begin{lstlisting}[style = Python]
+\begin{python}
 def Hello():
     """
       Meaningful docstring with in-depth explanation of this function
@@ -201,7 +242,138 @@ def Hello():
 
 if __name__ == '__main__':
     Hello()
-\end{lstlisting}
+\end{python}
+
 \section{Abreviations}
 
+\begin{acronym}
+    \acro{ann}{artificial neural network}
+\end{acronym}
+
 Use acronyms like this: \ac{ann}
+
+\section{Fonts}
+
+The main document font is \fontname\font, line spacing \the\baselineskip.\footnote{Footnote font is: \fontname\font
+. Line spacing was left at its default value in footnotes: \the\baselineskip}.
+
+\section{Tables}
+
+Table~\ref{table:data} shows how to add a table caption and reference a table.
+\begin{table}[h!]
+\centering
+\begin{tabular}{||c c c c||} 
+ \hline
+ Col1 & Col2 & Col2 & Col3 \\ [0.5ex] 
+ \hline\hline
+ 1 & 6 & 87837 & 787 \\ 
+ 2 & 7 & 78 & 5415 \\
+ 3 & 545 & 778 & 7507 \\
+ 4 & 545 & 18744 & 7560 \\
+ 5 & 88 & 788 & 6344 \\ [1ex] 
+ \hline
+\end{tabular}
+\caption{Table to test captions and labels.}
+\label{table:data}
+\end{table}
+
+Table~\ref{tab:longexample} that follows is an example of a long table.
+\begin{center}
+\begin{longtable}{|p{0.07\textwidth}|p{0.15\textwidth}|p{0.6\textwidth}|}
+\caption{My Long Table Example} \label{tab:longexample} \\
+\hline
+\textbf{ID} & \textbf{Name} & \textbf{Description} \\
+\hline
+\endfirsthead
+
+\hline
+\textbf{ID} & \textbf{Name} & \textbf{Description} \\
+\hline
+\endhead
+
+\hline
+\endfoot
+
+\hline
+\endlastfoot
+
+1 & Alice & Loremipsumdolor sit amet, consectetuer adipi
+scing elit. Ut purus elit, vestibulumut, place
+rat ac, adipiscingvitae, felis. Curabiturdictum
+ gravidamauris.Namarculibero,nonummyeget,
+ consectetuer id,vulputatea,magna. Donecvehi
+culaaugueeuneque.Pellentesquehabitantmorbi
+ tristiquesenectusetnetusetmalesuadafamesac
+ turpis egestas. Maurisut leo. Crasviverrame
+tusrhoncussem.Nullaet lectusvestibulumurna
+ fringillaultrices. Phaselluseutellussitamettor
+torgravidaplacerat. Integersapienest, iaculisin,
+ pretiumquis,viverraac,nunc.Praesentegetsem
+ velleoultricesbibendum.Aeneanfaucibus.Morbi
+ dolornulla,malesuadaeu,pulvinarat,mollisac,
+ nulla. Curabiturauctorsempernulla. Donecva
+riusorciegetrisus.Duisnibhmi,congueeu,accu
+msaneleifend, sagittisquis,diam. Duisegetorci
+ sitametorcidignissimrutrum. \\
+2 & Bob & Namdui ligula, fringillaa, euismodsodales, sol
+licitudinvel,wisi.Morbiauctor loremnonjusto.
+ Namlacuslibero,pretiumat, lobortisvitae,ultri
+cieset,tellus.Donecaliquet,tortorsedaccumsan
+ bibendum,eratligulaaliquetmagna,vitaeornare
+ odiometusami. Morbi acorci etnislhendrerit
+ mollis. Suspendisseutmassa.Crasnecante.Pel
+lentesqueanulla. Cumsociisnatoquepenatibus
+ etmagnisdisparturientmontes,nascetur ridicu
+lusmus.Aliquamtincidunturna.Nullaullamcor
+pervestibulumturpis. Pellentesquecursus luctus
+ mauris. \\
+3 & Carol & Nullamalesuadaporttitordiam.Donecfeliserat,
+ congue non, volutpat at, tincidunt tristique, li
+bero. Vivamus viverra fermentumfelis. Donec
+ nonummypellentesqueante. Phasellusadipiscing
+ semperelit.Proinfermentummassaacquam.Sed
+ diamturpis,molestievitae, placerat a,molestie
+ nec,leo.Maecenaslacinia.Namipsumligula,elei
+fendat, accumsannec, suscipita, ipsum. Morbi
+ blandit ligula feugiatmagna. Nunceleifendcon
+sequat lorem. Sed lacinianullavitaeenim. Pel
+lentesquetinciduntpurusvelmagna. Integernon
+ enim. Praesent euismodnunc eupurus. Donec
+ bibendumquamintellus. Nullamcursuspulvi
+narlectus.Donecetmi.Namvulputatemetuseu
+ enim.Vestibulumpellentesquefeliseumassa. \\
+4 & Dave & Quisqueullamcorperplacerat ipsum. Crasnibh.
+ Morbivel justovitaelacustinciduntultrices. Lo
+remipsumdolorsitamet,consectetueradipiscing
+ elit. Inhachabitasseplateadictumst. Integer
+ tempusconvallisaugue.Etiamfacilisis.Nuncele
+mentumfermentumwisi. Aeneanplacerat. Ut
+ imperdiet,enimsedgravidasollicitudin, felisodio
+ placeratquam, acpulvinar elitpurus eget enim.
+ Nuncvitae tortor. Proin tempus nibh sit amet
+ nisl. Vivamusquis tortorvitae risusportavehi
+cula. \\
+% Add more rows as needed
+\end{longtable}
+
+Finally, Table~\ref{tab:scores} is a  three-part table with notes.
+
+\begin{threeparttable}
+\caption{Student scores by department.} \label{tab:scores}
+\begin{tabular}{llr}
+\toprule
+\textbf{Name} & \textbf{Department} & \textbf{Score} \\
+\midrule
+Alice\tnote{1} & Physics & 95 \\
+Bob\tnote{2} & Mathematics & 89 \\
+Carol & Chemistry & 92 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item \textbf{Note:} Main note of the table.
+\small
+\item[1] Alice received extra credit.
+\item[2] Bob's score includes a project bonus.
+\end{tablenotes}
+\end{threeparttable}
+\end{center}
