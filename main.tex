@@ -14,8 +14,7 @@
 
 % The default font size and two-sided printing
 % For a one-sided printing change the flag "twoside" to "oneside"
-\documentclass[11pt, oneside, table,xcdraw]{Thesis}
-
+\documentclass[12pt, twoside]{Thesis}
 
 %-------------------------------------------------------------------------
 %   PREAMBLE AND SETTINGS
@@ -31,7 +30,7 @@
 %-------------------------------------------------------------------------
 %	DOCUMENT
 %-------------------------------------------------------------------------
-
+\usepackage{lipsum} % For dummy text, REMOVE in your real document
 \begin{document}
 
 % Start counting pages in an unused scheme to fix backref
@@ -39,47 +38,16 @@
 
 % Includes the front pages (cover and etc.)
 \pagestyle{empty}
-\includepdf[pages={1},pagecommand={},scale=1]{Front/Cover/template}
+\includepdf[pages={1},pagecommand={},scale=1]{Front/covers}
 \cleardoublepage
-\includepdf[pages={2},pagecommand={},scale=1]{Front/Cover/template}
+\includepdf[pages={1},pagecommand={},scale=1]{Front/title}
 \cleardoublepage
 \pagestyle{fancy}
-
-%----------- Failed attempt to make cover page in latex ------------------
-
-% Cover page
-%\newgeometry{bindingoffset=0cm,
-%	top=1.27cm,
-%	outer=1.27cm,
-%	inner=1.27cm,
-%	bottom=1.27cm}
-
-%\pagestyle{empty}
-%
-%\begin{picture}(-5,0)(2.5,0)
-%% MSc symbol
-%\put(331.8,-808.061){\includegraphics[width=267.6pt,height=464.25pt]{Front/Cover/MSc.png}}
-%% FEUP logo
-%\put(382,-345){\includegraphics[width=155.9pt]{Front/Cover/FEUP.png}}
-%% FCUP logo
-%\put(360.5,-293){\includegraphics[width=183pt]{Front/logos/fcup.png}}
-%\end{picture}
-%
-%%\makebox[12cm][l]{\ttitle}
-%
-%\vfill
-%\parbox[t][12cm][t]{12cm}{\bf\fontsize{55}{0}\selectfont\ttitle}
-%\vfill
-%
-%\restoregeometry
 
 %-------------------------------------------------------------------------
 
 % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
 \frontmatter
-
-% Title page
-%\maketitle
 
 % Edit this file!
 \input{precontent}
@@ -89,8 +57,6 @@
 %	THESIS CONTENT - CHAPTERS
 %-------------------------------------------------------------------------
 
-\addvspacetoc{0.3cm}
-
 % Begin numeric (1,2,3...) page numbering
 \mainmatter
 
@@ -98,37 +64,48 @@
 \renewcommand{\chaptermark}[1]{\markboth{\thechapter. \textsc{#1}}{}}
 %\fancyhead[LO]{\leftmark}
 
-
 %%% -----------  ADD CHAPTERS HERE ------------------ %%%
-
 \input{Chapters/ChapterTemplate}
 % Add others as needed
-
-
-%-------------------------------------------------------------------------
-%	BIBLIOGRAPHY
-%-------------------------------------------------------------------------
-\addvspacetoc{0.5cm}
-\addtotoc{Bibliography}
-
-%\fancyhead[LO]{\textsc{Bibliography}}
-
- % The references are stored in the file "Bibliography.bib"
-\bibliography{Bibliography}
 
 %-------------------------------------------------------------------------
 %	THESIS CONTENT - APPENDICES
 %-------------------------------------------------------------------------
-
 \appendix % Cue to tell LaTeX that the following 'chapters' are Appendices
+\cleardoublepage
+\appendixpage
 
 %%% -----------  ADD APPENDIX HERE ------------------ %%%
-
 \input{Appendices/AppendixTemplate}
 %\input{Appendices/AppendixB}
 %\input{Appendices/AppendixC}
 
 \backmatter
 
+%-------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%-------------------------------------------------------------------------
+% \addvspacetoc{0.5cm} % Add a gap in the Contents, for aesthetics
+\phantomsection
+\addcontentsline{toc}{chapter}{References}
+ % The references are stored in the file "Bibliography.bib"
+\bibliography{Bibliography}
+
+%-------------------------------------------------------------------------
+%	BACK COVER
+%-------------------------------------------------------------------------
+\cleardoublepage
+\hbox{}
+\thispagestyle{empty}
+
+% adds the blank pages before the back cover
+\cleardoublepage
+\hbox{}
+\thispagestyle{empty}
+
+% Include the back cover
+\newpage
+\thispagestyle{empty}
+\includepdf[pages={2},pagecommand={},scale=1]{Front/covers}
 
 \end{document}

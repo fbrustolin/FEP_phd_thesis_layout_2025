@@ -4,16 +4,35 @@
 
 \NeedsTeXFormat{LaTeX2e} % [1996/12/01]
 \ProvidesClass{Thesis}
-              [2019/10/27 v1.2
-   LaTeX document class]
+        [2025/08/11 v1.0.0-alpha.1
+   LaTeX document class for August 2025 FEP PhD thesis (based on book class).]
+
+% Require LuaLaTeX
+\begingroup
+  \edef\engine{\detokenize{%
+  \ifx\directlua\undefined
+    not-lualatex
+  \else
+    lualatex
+  \fi
+  }}
+  \ifx\engine\detokenize{not-lualatex}
+  \PackageError{Thesis}{%
+    This class requires LuaLaTeX.%
+  }{%
+    Please compile your document with LuaLaTeX.%
+  }
+  \fi
+\endgroup
+
 \def\baseclass{book}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{\baseclass}}
 \def\@checkoptions#1#2{
   \edef\@curroptions{\@ptionlist{\@currname.\@currext}}
   \@tempswafalse
   \@tfor\@this:=#2\do{
-    \@expandtwoargs\in@{,\@this,}{,\@curroptions,}
-    \ifin@ \@tempswatrue \@break@tfor \fi}
+  \@expandtwoargs\in@{,\@this,}{,\@curroptions,}
+  \ifin@ \@tempswatrue \@break@tfor \fi}
   \let\@this\@empty
   \if@tempswa \else \PassOptionsToClass{#1}{\baseclass}\fi
 }
@@ -26,22 +45,6 @@
     \typeout{-----------------------------------------------------}
 }
 
-%\newcommand\Declaration[1]{
-%\btypeout{Declaration of Authorship}
-%\addtotoc{Declaration of Authorship}
-%\thispagestyle{plain}
-%\null\vfil
-%%\vskip 60\p@
-%\begin{center}{\huge\bf Declaration of Authorship\par}\end{center}
-%%\vskip 60\p@
-%{\normalsize #1}
-%\vfil\vfil\null
-%%\cleardoublepage
-%}
-
-% Allows the use of international characters (e.g. Umlauts)
-\RequirePackage[utf8]{inputenc}
-
 \newcommand\btypeout[1]{\bhrule\typeout{\space #1}\bhrule}
 
 \def\today{\ifcase\month\or
@@ -50,39 +53,32 @@
   \space \number\year
 } % \today of the form "Month Year"
 
-\newcommand\addvspacetoc[1]{\addtocontents{toc}{\vspace{#1}}}
-
 %-------------------------------------------------------------------------
 %	PARAGRAPHS
 %-------------------------------------------------------------------------
 \usepackage[nodisplayskipstretch]{setspace}
 \onehalfspacing
-\setstretch{1.4}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{8pt}
-%\setlength{\parskip}{2.0ex plus0.5ex minus0.2ex}
-
 
 %-------------------------------------------------------------------------
 %	CHAPTERS & SECTIONS
 %-------------------------------------------------------------------------
 \usepackage{titlesec}
-\titleformat{\section}{\fontsize{14}{0}\selectfont\mdseries}{\thesection{.}}{1em}{}
-\titleformat{\chapter}[hang]{\fontsize{20}{0}\selectfont\mdseries}{\thechapter{.}}{1em}{}
 
 %-------------------------------------------------------------------------
 %	MARGINS & GEOMETRY
 %-------------------------------------------------------------------------
 \usepackage[a4paper,
   bindingoffset=0cm,
-	top=2.5cm,
-	outer=3cm,
-	inner=3cm,
-	bottom=2.5cm
+	top=3.0cm,
+	outer=2.5cm,
+	inner=3.5cm,
+	bottom=3.0cm
 ]{geometry}
 
-\raggedbottom
-\setlength{\topskip}{1\topskip \@plus 5\p@}
+\raggedbottom % Do not stretch the text to fill the page vertically
+
 \doublehyphendemerits=10000       % No consecutive line hyphens.
 \brokenpenalty=10000              % No broken words across columns/pages.
 \widowpenalty=9999                % Almost no widows at bottom of page.
@@ -90,37 +86,15 @@
 \interfootnotelinepenalty=9999    % Almost never break footnotes.
 
 %-------------------------------------------------------------------------
-%	HEADER STYLE
+%	HEADER/FOOTER STYLES
 %-------------------------------------------------------------------------
 \usepackage{fancyhdr}
+\fancypagestyle{plain}{} % Redefine the plain page style to be empty
 \pagestyle{fancy}
-\fancyheadoffset[L]{0pt}
-\fancypagestyle{plain}{}
-
-% for two sided print
-%\fancyhead[LE,RO]{
-%    \scriptsize{\begin{tabular}{r|l} 
-%        FCUP & \thepage \tabularnewline
-%        \ttitle & 
-%    \end{tabular}}}
-
-%\fancyhead[LO,RE]{}
-
-% for one sided print
-
-
-
-\fancyhead[L]{}
-\fancyhead[R]{
-    \scriptsize{\begin{tabular}{r|l} 
-        FCUP & \thepage \tabularnewline
-        \ttitle & 
-    \end{tabular}}}
-
-\fancyfoot{}
+\fancyhf{} % clears header and footer
+\fancyfoot[LE,RO]{\thepage} % Number pages on the left side of even pages and right side of odd pages
     
 \renewcommand{\headrulewidth}{0pt}
-
 
 %-------------------------------------------------------------------------
 %	CLEAR TWOSIDE PAGES
@@ -167,22 +141,22 @@
 %-------------------------------------------------------------------------
 %	FRACTIONS & OTHER
 %-------------------------------------------------------------------------
-\renewcommand{\topfraction}{0.85}
-\renewcommand{\bottomfraction}{.85}
-\renewcommand{\textfraction}{0.1}
-\renewcommand{\dbltopfraction}{.85}
-\renewcommand{\floatpagefraction}{0.75}
-\renewcommand{\dblfloatpagefraction}{.75}
-\setcounter{topnumber}{9}
-\setcounter{bottomnumber}{9}
-\setcounter{totalnumber}{20}
-\setcounter{dbltopnumber}{9}
+\renewcommand{\topfraction}{0.85} % Allow floats to occupy up to 85% of the top of a text page
+\renewcommand{\bottomfraction}{.85} % Allow floats to occupy up to 85% of the bottom of a text page
+\renewcommand{\textfraction}{0.1} % Require at least 10% of a page to be text (not floats)
+\renewcommand{\dbltopfraction}{.85} % Allow double-column floats to occupy up to 85% of the top of a page
+\renewcommand{\floatpagefraction}{0.75} % Require at least 75% of a float page to be floats (rest can be blank)
+\renewcommand{\dblfloatpagefraction}{.75} % Require at least 75% of a double-column float page to be floats
+\setcounter{topnumber}{9} % Allow up to 9 floats at the top of a text page
+\setcounter{bottomnumber}{9} % Allow up to 9 floats at the bottom of a text page
+\setcounter{totalnumber}{20} % Allow up to 20 floats on a single page
+\setcounter{dbltopnumber}{9} % Allow up to 9 double-column floats at the top of a page
 \usepackage{graphicx}
 \usepackage{epstopdf}
 \usepackage{booktabs}
+\usepackage{threeparttable}
 \usepackage{rotating}
 \usepackage{listings}
-% \usepackage{lstpatch}
 \lstset{captionpos=b,
         frame=tb,
         basicstyle=\scriptsize\ttfamily,
@@ -333,7 +307,12 @@
 
 \newcommand*{\subject}[1]{
   \def\subjectname{#1}
-  \hypersetup{pdfsubject=\subjectname}
+  \def\pdfsubjectstr{\ttype\ in \subjectname}
+  \makeatletter
+  \g@addto@macro\pdfsubjectstr{, \univname}
+  \g@addto@macro\pdfsubjectstr{, \the\year}
+  \makeatother
+  \hypersetup{pdfsubject=\pdfsubjectstr}
 }
 
 \newcommand*{\keywords}[1]{
@@ -341,375 +320,59 @@
   \hypersetup{pdfkeywords=\keywordnames}
 }
 
-
 %-------------------------------------------------------------------------
 %	TITLE PAGE DESIGN
 %-------------------------------------------------------------------------
-
-\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
-
 \renewcommand\maketitle{
 % TITLE PAGE
 \thispagestyle{empty}
 \begin{titlepage}
- 	\begin{center}
- 		\textsc{\LARGE \univname}	\\[1.5cm] % University name
- 		\textsc{\Large \ttype}		\\[0.5cm] % Thesis type
+\pagestyle{empty}
+\begin{center}
+\Large
+You used the command \texttt{\textbackslash maketitle} to render this page.
+\end{center}
+  
+\normalsize
+Instead, set up the cover pages (front and back) and the title page PDFs 
+from the MS Word templates \texttt{.fep/FEP Capa doutoramento.docx}\ and 
+\texttt{.fep/Cover sheet.docx}, export them to 
+the files \texttt{Front/cover.pdf}\ and \texttt{Front/title.pdf}, 
+RESPECTIVELY, and use the following commands before the \texttt{\textbackslash frontmatter}:\\[1em]
+\texttt{\textbackslash pagestyle\{empty\}}\\
+\texttt{\textbackslash includepdf[pages=\{1\},pagecommand=\{\},scale=1]\{Front/covers\}}\\
+\texttt{\textbackslash cleardoublepage}\\
+\texttt{\textbackslash includepdf[pages=\{1\},pagecommand=\{\},scale=1]\{Front/title\}}\\
+\texttt{\textbackslash cleardoublepage}\\
+\texttt{\textbackslash pagestyle\{fancy\}}
 
- 		\HRule \\[0.4cm] % Horizontal line
- 		{\huge \bfseries \ttitle}\\[0.4cm] % Thesis title
- 		\HRule \\[1.2cm] % Horizontal line
-
- 		\begin{minipage}[t]{0.4\textwidth}
- 			\begin{flushleft}
- 				\large \emph{Author:}\\ \authornames
- 			\end{flushleft}
- 		\end{minipage}
- 		\begin{minipage}[t]{0.4\textwidth}
- 			\begin{flushright}
- 				\large
- 				\emph{Supervisor:} \\ \supname
- 			\ifdefined\cosupnamenolink
- 				\\[0.4cm]
- 				\emph{Co-supervisor:} \\ \cosupname
- 			\fi
- 			\end{flushright}
- 		\end{minipage}
- 		\\[2.5cm]
-
- 		\large \textit{A thesis submitted in fulfilment of the requirements\\ for the degree of \degreename}
- 		\\[0.3cm] \textit{at the} \\[0.4cm]
- 		\ifdefined\facnamenolink \facname \\ \fi
-    \ifdefined\deptnamenolink \deptname \\ \fi
-    \ifdefined\groupnamenolink \groupname \\ \fi
-    \bigskip\bigskip\bigskip
- 		% Faculty name and department name
-         {\large \today} \\[4cm] % Date
-         % University/department logo. Uncomment to place it
-         %\includegraphics{Logo}
- 		\vfill
- 	\end{center}
+Don't forget to insert the back cover as the document's last page with 
+the commands:\\[1em]
+\texttt{\textbackslash pagestyle\{empty\}}\\
+\texttt{\textbackslash includepdf[pages=\{2\},pagecommand=\{\},scale=1]\{Front/covers\}}\\
 \end{titlepage}
 \cleardoublepage
 }
 
 %-------------------------------------------------------------------------
-%	ABSTRACT PAGE DESIGN
+%	PRE-TEXTUAL PAGE DESIGN
 %-------------------------------------------------------------------------
-\usepackage{keyval,etoolbox}
-
-\newcommand*\absEnvTitle{Abstract}
-\newcommand*\absEnvTitlePage{Abstract Page}
-\newcommand*\absEnvDegree{\degreename}
-\newcommand*\absEnvConnector{by}
-\newcommand*\absEnvThesisTitle{\ttitle}
-\newcommand*\absEnvKeyName{Keywords}
-\newcommand*\absEnvKey{\keywordnames}
-
-\define@key{absEnv}{title}{\renewcommand*\absEnvTitle{#1}}
-\define@key{absEnv}{thesistitle}{\renewcommand*\absEnvThesisTitle{#1}}
-\define@key{absEnv}{titlepage}{\renewcommand*\absEnvTitlePage{#1}}
-\define@key{absEnv}{degree}{\renewcommand*\absEnvDegree{#1}}
-\define@key{absEnv}{nameconnector}{\renewcommand*\absEnvConnector{#1}}
-\define@key{absEnv}{keywordsname}{\renewcommand*\absEnvKeyName{#1}}
-\define@key{absEnv}{keywords}{\renewcommand*\absEnvKey{#1}}
-
-\newenvironment{abstract}[1][]
+\NewDocumentEnvironment{envprecontent}{o m}
 {
-  \setkeys{absEnv}{#1}
-  \btypeout{\absEnvTitlePage}
-  \addtotoc{\absEnvTitle}
-  \pagestyle{fancy}
-% for two sided print
-%\fancyhead[LE,RO]{
-%    \begin{tabular}{r|l} 
-%        FCUP & \thepage \tabularnewline
-%        \ttitle & 
-%    \end{tabular}}
-
-%\fancyhead[LO,RE]{}
-
-% for one sided print
-
-\fancyhead[L]{}
-\fancyhead[R]{
-    \scriptsize{\begin{tabular}{r|l} 
-        FCUP & \thepage \tabularnewline
-        \ttitle & 
-    \end{tabular}}}
-
-\fancyfoot{}
-  %\vspace*{\fill}
-
-\setlength{\parskip}{8pt}
-%{\normalsize \UNIVNAME \par} % University name in capitals
-%\bigskip
-{\fontsize{20}{0}\selectfont{\absEnvTitle} \par}
-%    \bigskip
-%    \ifdefined\facnamenolink {\normalsize \facname \par} \fi % Faculty name
-%    \ifdefined\deptnamenolink {\normalsize \deptname \par} \fi % Dept. name
-%    \ifdefined\groupnamenolink {\normalsize \groupname \par} \fi % Group name
-%    \bigskip
-%    {\normalsize \absEnvDegree\par} % Degree name
-%    \bigskip
-%    {\normalsize\bf \absEnvThesisTitle \par} % Thesis title
-%    \medskip
-%    {\normalsize \absEnvConnector\space \authornames \par} % Author name
-%    \bigskip
-
-}
-{
-  \absEnvKeyName:\space \absEnvKey
-  \vspace*{\fill}\vspace*{\fill}\vspace*{\fill}\vspace*{\fill}
-  \cleardoublepage
-  \pagestyle{fancy}
-
-}
-
-%-------------------------------------------------------------------------
-%	TABLE OF CONTENTS PAGE DESIGN
-%-------------------------------------------------------------------------
-\addtocounter{secnumdepth}{1}
-\setcounter{tocdepth}{6}
-\newcounter{dummy}
-\newcommand\addtotoc[1]{
-\refstepcounter{dummy}
-\addcontentsline{toc}{chapter}{#1}}
-
-\AtBeginDocument{\setlocalecaption{english}{contents}{Table of Contents}}
-
-%\renewcommand*\contentsname{Summary}
-
-\renewcommand\tableofcontents{
-\btypeout{\contentsname}
-\addtotoc{\contentsname}
-
-%\fancyhead[LO]{\textsc{\contentsname}}
-
-\begin{spacing}{1}{
-    
-    \setlength{\parskip}{5pt}
-    \if@twocolumn
-      \@restonecoltrue\onecolumn
-    \else
-      \@restonecolfalse
-    \fi
-    \chapter*{\contentsname
-        \@mkboth{\MakeUppercase\contentsname}{\MakeUppercase\contentsname}}
-    \@starttoc{toc}
-    \if@restonecol\twocolumn\fi
-}\end{spacing}
-\cleardoublepage
-}
-
-
-%-------------------------------------------------------------------------
-%	LIST OF FIGURES PAGE DESIGN
-%-------------------------------------------------------------------------
-\renewcommand\listoffigures{
-\btypeout{\listfigurename}
-\addtotoc{\listfigurename}
-
-%\fancyhead[LO]{\textsc{\listfigurename}}
-
-\begin{spacing}{1}{
-    \setlength{\parskip}{1pt}
-    \if@twocolumn
-      \@restonecoltrue\onecolumn
-    \else
-      \@restonecolfalse
-    \fi
-    \chapter*{\listfigurename
-      \@mkboth{\MakeUppercase\listfigurename}{\MakeUppercase\listfigurename}}
-    \@starttoc{lof}
-    \if@restonecol\twocolumn\fi
-}\end{spacing}
-\cleardoublepage
-}
-
-%-------------------------------------------------------------------------
-%	LIST OF TABLES PAGE DESIGN
-%-------------------------------------------------------------------------
-\renewcommand\listoftables{
-\btypeout{\listtablename}
-\addtotoc{\listtablename}
-
-%\fancyhead[LO]{\textsc{\listtablename}}
-
-\begin{spacing}{1}{
-    \setlength{\parskip}{1pt}
-    \if@twocolumn
-      \@restonecoltrue\onecolumn
-    \else
-      \@restonecolfalse
-    \fi
-    \chapter*{\listtablename
-      \@mkboth{\MakeUppercase\listtablename}{\MakeUppercase\listtablename}}
-    \@starttoc{lot}
-    \if@restonecol\twocolumn\fi
-}\end{spacing}
-\cleardoublepage
-}
-
-%-------------------------------------------------------------------------
-%	LIST OF ABBREVIATIONS PAGE DESIGN
-%-------------------------------------------------------------------------
-\usepackage{xparse,expl3,longtable}
-% *****************************************************************
-% **
-% ** Package l3regex is obsolete and has been removed! So, I changed it
-% **
-% ** Its functionality is now only provided as part of the expl3 package.
-% **
-% ** The old packages will be removed entirely at the end of 2018.
-% **
-% ** Therefore, please replace '\usepackage{l3regex}'
-% ** with '\usepackage{expl3}' in your documents as soon as possible.
-% **
-% \ExplSyntaxOn
-% \NewDocumentCommand{\boldcapitals}{ m }
-%  {
-%   \pouya_boldfirst:n { #1 }
-%  }
-% \cs_new_protected:Npn \pouya_boldfirst:n #1
-%  {
-%   \tl_set:Nn \l_pouya_input_tl { #1 }
-%   \regex_replace_once:nnN { \A(.*?[A-Za-z]) } { \c{textbf}\cB\{ \1 \cE\} } \l_pouya_input_tl
-%   \regex_replace_all:nnN { (\s) (.?[A-Z]) } { \1  \c{textbf}\cB\{ \2 \cE\} } \l_pouya_input_tl
-%   \regex_replace_all:nnN { (\-) (.?[A-Z]) } { \1  \c{textbf}\cB\{ \2 \cE\} } \l_pouya_input_tl
-%   \tl_use:N \l_pouya_input_tl
-%  }
-% \ExplSyntaxOff
-
-\newcommand\glossaryname{Abbreviations}
-
-\renewenvironment{glossary}
-{
-  \btypeout{\glossaryname}
-  \addtotoc{\glossaryname}
-%  \fancyhead[LO]{\textsc{\glossaryname}}
-  \chapter*{\glossaryname
-      \@mkboth{\MakeUppercase\glossaryname}{\MakeUppercase\glossaryname}}
-  \setlength{\tabcolsep}{0.1cm}
-	\begin{longtable}[c]{r@{\hskip 1cm}l}
-}
-{
-    \hspace*{2.3cm} & \hspace*{13cm}
-  \end{longtable}\par
-  \cleardoublepage
-}
-
-\newcommand\abbrev[2]{
-  \vspace{0.15cm} \textbf{#1}	& #2 \\
-}
-
-%-------------------------------------------------------------------------
-%	PHYSICAL CONSTANTS PAGE DESIGN
-%-------------------------------------------------------------------------
-\newcommand\listconstantsname{Physical Constants}
-
-\newenvironment{listofcontants}
-{
-  \btypeout{\listconstantsname}
-  \addtotoc{\listconstantsname}
-%  \fancyhead[LO]{\textsc{\listconstantsname}}
-  \chapter*{\listconstantsname
-      \@mkboth{\MakeUppercase\listconstantsname}{\MakeUppercase\listconstantsname}}
-  \setlength{\tabcolsep}{0.1cm}
-	\begin{longtable}[c]{llcl}
-}
-{
-    \const[\phantom{$=$}]{}{\phantom{$mp/mn$}}{}
-  \end{longtable}\par
-  \cleardoublepage
-}
-
-\newcommand\const[4][$=$]{
-  	\vspace{0.15cm}\hspace{0.4cm}\parbox{7cm}{\vspace{0.15cm}\setstretch{1} #2}\hspace{0.8cm} & #3 & #1 & \parbox{6cm}{\setstretch{1} #4} \\
-}
-
-%-------------------------------------------------------------------------
-%	SYMBOLS PAGE DESIGN
-%-------------------------------------------------------------------------
-\newcommand\listsymbolsname{Symbols}
-
-\newenvironment{listofsymbols}
-{
-  \btypeout{\listsymbolsname}
-  \addtotoc{\listsymbolsname}
-%  \fancyhead[LO]{\textsc{\listsymbolsname}}
-  \chapter*{\listsymbolsname
-      \@mkboth{\MakeUppercase\listsymbolsname}{\MakeUppercase\listsymbolsname}}
-  \setlength{\tabcolsep}{0.1cm}
-	\begin{longtable}[c]{l@{\hskip 2cm}l@{\hskip 2cm}l}
-}
-{
-    \symb{\phantom{$d$}}{\phantom{distance}}{\phantom{m}}
-  \end{longtable}\par
-  \cleardoublepage
-}
-
-\newcommand\symb[3]{
-  	\vspace{0.15cm}#1 & #2 & #3 \\
-}
-
-
-%-------------------------------------------------------------------------
-%	QUOTATION PAGE DESIGN
-%-------------------------------------------------------------------------
-
-\newcommand\quotepage[2]{
-  \thispagestyle{empty} % Remove page number
-  \null\vfill % Add some space to move the quote down the page a bit
-  \textit{``#2"}
-  \begin{flushright}#1\end{flushright}
-  % Add some space at the bottom to position the quote just right
-  \vfill\vfill\vfill\vfill\vfill\vfill\null
-  \cleardoublepage % Start a new page
-}
-
-
-%-------------------------------------------------------------------------
-%	ACKNOWLEDGEMENTS PAGE DESIGN
-%-------------------------------------------------------------------------
-
-\newenvironment{acknowledgements}
-{
-  \btypeout{Acknowledgements}
-  \addtotoc{Acknowledgements}
-  \pagestyle{empty}
-  {\fontsize{20}{0}\selectfont{Acknowledgements} \par}
-  \vspace{0.3cm}
+  \btypeout{#2}
+  \chapter*{#2}
+  \par
+  \IfValueT{#1}{\begin{otherlanguage}{#1}} % Switch language if provided
+  \begin{spacing}{2}
   \normalsize\normalfont
 }
 {
-  \vfil\vfil\null
-  \cleardoublepage
-  \pagestyle{fancy}
-}
-
-
-%-------------------------------------------------------------------------
-%	DEDICATORY PAGE DESIGN
-%-------------------------------------------------------------------------
-
-\newenvironment{dedicatory}
-{
-  \btypeout{Dedicatory}
-  \thispagestyle{empty}
-  %\null\vfil
-
-  %\vskip 60\p@
-  \vspace*{\fill}
-  \begin{flushright}
-    \Large \sl
-}
-{
-  \end{flushright}
-%  \vfil\null
+  \end{spacing}
+  \IfValueT{#1}{\end{otherlanguage}} % Switch language if provided
   \cleardoublepage
 }
 
+% redefines backmatter to the next part start on the right side
 \renewcommand\backmatter{
   \if@openright
     \cleardoublepage
