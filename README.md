@@ -16,7 +16,7 @@ In the Chapters folders, you can find a quick overview of how to use the model a
 6. If you want to ensure that all of your labels are being used, check the *Python* script [scripts/check_references.py](scripts/check_references.py) for a way to verify it.
 7. And, now, edit at will!
 
-**_The stock [main.pdf](https://github.com/fbrustolin/FCUP_thesis_layout_2024/blob/main/main.pdf) will include how to do most stuff, so copy/read it before making other modifications!_**
+**_The stock [main.pdf](https://github.com/fbrustolin/FEP_phd_thesis_layout_2025/blob/main/main.pdf) will include how to do most stuff, so copy/read it before making other modifications!_**
 
 ### Compiling tool
 

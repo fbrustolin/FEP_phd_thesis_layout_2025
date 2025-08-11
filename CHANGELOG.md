@@ -19,6 +19,7 @@
 - Main font changed to *Times New Roman*.
 - Divisions' title formatting moved from the [Thesis class](Thesis.cls) to the [document preamble](preamble.tex).
 - Styles for typesetting Python is now provided by *pythonhighlight* and not defined in the [document preamble](preamble.tex) anymore.
+- Bibliography engine changed from *bibtex + natbib* to *biblatex + biber*.
 
 ### Removed
 

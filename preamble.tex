@@ -2,6 +2,7 @@
 %-------------------------------------------------------------------------
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %-------------------------------------------------------------------------
+\usepackage{mathptmx}
 % Use Times New Roman as main font
 \usepackage{fontspec}
 \setmainfont{Times New Roman}
@@ -43,13 +44,72 @@
 % Bibliography setup
 %-------------------------------------------------------------------------
 
-% Use the natbib reference package - read up on this to edit the reference
-% style; if you want text (e.g. Smith et al., 2012) for the in-text references
-% (instead of numbers), remove 'numbers'
-\usepackage{natbib}
-\bibliographystyle{econ}  % Use the econ bibliography style
-% If you want to use the 'plain' style, change the above line to:
-% \bibliographystyle{plainnat}
+% Use biblatex with biber for references/bibliography
+\AddToHook{package/biblatex/after}{%
+
+\renewbibmacro*{doi+eprint+url}{ % redefine the macro to print DOI, eprint, URL
+  \iftoggle{bbx:doi}
+    {\printfield{doi}}
+    {}%
+  \newunit\newblock
+  \iftoggle{bbx:eprint}
+    {\usebibmacro{eprint}}
+    {}%
+  \newunit\newblock
+  \iffieldundef{doi}
+    {\usebibmacro{url+urldate}} % prints URL only if there is no DOI available
+    {}}% closes \renewbibmacro
+
+\renewbibmacro*{volume+number+eid}{
+  \iffieldundef{volume}
+    {}
+    {
+      \iffieldundef{number}
+        {\addcomma\addspace Vol.~\printfield{volume}} % only volume
+        {\addcomma\addspace Vol.~\printfield{volume}\addcomma\addspace Nº~\printfield{number}} % both volume and number
+    }
+  \setunit*{\addcomma\space}
+  \printfield{eid}
+}
+
+\DeclareFieldFormat % https://tex.stackexchange.com/a/509406/289572
+  [article,inbook,incollection,inproceedings,patent,thesis,unpublished,book,online]
+  {titlecase:title}{\MakeSentenceCase*{#1}}
+
+\DeclareSortingNamekeyTemplate{ % from https://github.com/plk/biblatex/issues/1241#issuecomment-1210851762
+    \keypart{
+        \namepart[use=true]{prefix}
+        \namepart{family}
+    }
+    \keypart{
+        \namepart[inits=true]{given}
+    }
+    \keypart{
+        \namepart{suffix}
+    }
+    \keypart{
+        \namepart[use=false]{prefix}
+    }} % closes \DeclareSortingNamekeyTemplate
+
+\AtEveryBibitem{% clear the day and month of date field for all entries
+  \clearfield{month}
+  \clearfield{day}} % closes \AtEveryBibitem
+
+\DefineBibliographyStrings{english}{%
+  bibliography = {References},
+}
+} % closes \AddToHook
+
+\usepackage[bibstyle=ext-authoryear,citestyle=authoryear-comp,articlein=false,dashed=fullhash,isbn=false,eprint=false,uniquename=false,uniquelist=false,giveninits=true,mincitenames=1,maxcitenames=2,maxbibnames=20]{biblatex}
+\addbibresource{Bibliography.bib}
+
+% % Use the natbib reference package - read up on this to edit the reference
+% % style; if you want text (e.g. Smith et al., 2012) for the in-text references
+% % (instead of numbers), remove 'numbers'
+% \usepackage{natbib}
+% \bibliographystyle{econ}  % Use the econ bibliography style
+% % If you want to use the 'plain' style, change the above line to:
+% % \bibliographystyle{plainnat}
 
 % Include pdf pages in the document
 % Necessary to include the front pages (cover and etc.)
@@ -97,6 +157,7 @@
 %-------------------------------------------------------------------------
 \usepackage{amsmath} % Interesting environments
 \usepackage{amssymb} % Interesting symbols
+\usepackage{amsthm} % Theorem environments
 \usepackage{commath} % Interesting macros
 \usepackage{braket} % Dirac bra-ket and set notations
 \usepackage{mathtools} % Mathematical tools to use with amsmath
@@ -139,16 +200,10 @@
 % backref makes the bibliography say where the entry was cited.
 % For the print version of the thesis you might wanna set all colors to back
 \usepackage{hyperref}
-\usepackage[hyperpageref]{backref}
+% \usepackage[hyperpageref]{backref}
 \hypersetup{colorlinks, citecolor=black, urlcolor=black,
         linkcolor=black, breaklinks=true, hypertexnames=true}
-\renewcommand*{\backref}[1]{}
-\renewcommand*{\backrefalt}[4]{%
-    \ifcase #1%
-          \or [Cited on page~#2.]%
-          \else [Cited on pages~#2.]%
-    \fi%
-    }
+
 % Interesting URL breakings
 \usepackage{url}
 \def\UrlBreaks{\do\/\do-\do\&\do.\do:}
